@@ -11,7 +11,7 @@ public class Conflict {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     /* Id: clave primaria
     * GeneratedValue : genera solo el codigo */
-    private int id;
+    private Integer id;
     private String nombre;
     private LocalDate fechaInicio;
 
@@ -45,7 +45,7 @@ public class Conflict {
         return fechaInicio;
     }
 
-    public void setFechaInicio(LocalDate startDate) {
+    public void setFechaInicio(LocalDate fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
@@ -53,7 +53,7 @@ public class Conflict {
         return estado;
     }
 
-    public void setEstado(ConflictStatus status) {
+    public void setEstado(ConflictStatus estado) {
         this.estado = estado;
     }
 
