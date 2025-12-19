@@ -1,5 +1,7 @@
 package com.example.conflicttracker.dto;
 
+import com.example.conflicttracker.entity.ConflictStatus;
+
 import java.time.LocalDate;
 
 
@@ -13,6 +15,9 @@ public class ConflictResponseDto {
     private String descripcion;
     private String estado;
     private LocalDate fechaInicio;
+
+    private ConflictStatus conflictStatus;
+
 
     public ConflictResponseDto() {
     }

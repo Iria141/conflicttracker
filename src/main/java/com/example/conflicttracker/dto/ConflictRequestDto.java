@@ -3,6 +3,7 @@ package com.example.conflicttracker.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
@@ -15,7 +16,7 @@ Se ñaden las validaciones siempre aqui
 public class ConflictRequestDto {
 
     @NotBlank(message = "El nombre es obligatorio") //Se usa en Strings
-    @Size(max = 255, message = "El nombre no puede superar 255 caracteres")
+    @Size(min =3, max = 100, message = "El nombre necesita mínimo 3 carácteres")
     private String nombre;
 
     @NotBlank(message = "La descripción es obligatoria")
@@ -26,6 +27,7 @@ public class ConflictRequestDto {
     private String estado;
 
     @NotNull(message = "La fecha de inicio es obligatoria")
+    @PastOrPresent(message = "La fecha de inicio no puede ser futura")
     private LocalDate fechaInicio;
 
 

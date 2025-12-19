@@ -27,16 +27,18 @@ public class ConflictMapper {
         return conflict;
     }
 
-    public ConflictResponseDto toDto(Conflict conflict) {
+    public ConflictResponseDto toResponseDto(Conflict conflict) {
+        if (conflict == null) {
+            return null;
+        }
+
         ConflictResponseDto dto = new ConflictResponseDto();
         dto.setId(conflict.getId());
         dto.setNombre(conflict.getNombre());
         dto.setDescripcion(conflict.getDescripcion());
-        dto.setEstado(
-                conflict.getEstado() != null
-                        ? conflict.getEstado().name()
-                        : null
-        );        dto.setFechaInicio(conflict.getFechaInicio());
+        dto.setEstado(conflict.getEstado().name());
+        dto.setFechaInicio(conflict.getFechaInicio());
+
         return dto;
     }
 }

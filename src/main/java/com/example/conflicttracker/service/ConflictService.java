@@ -3,6 +3,7 @@ package com.example.conflicttracker.service;
 import com.example.conflicttracker.dto.ConflictRequestDto;
 import com.example.conflicttracker.entity.Conflict;
 import com.example.conflicttracker.entity.ConflictStatus;
+import com.example.conflicttracker.exception.ConflictNotFoundException;
 import com.example.conflicttracker.repository.ConflictRepository;
 import org.springframework.stereotype.Service;
 import com.example.conflicttracker.dto.ConflictResponseDto;
@@ -29,6 +30,11 @@ public class ConflictService {
 
     public List<Conflict> obtenerTodos() {
         return conflictRepository.findAll();
+    }
+
+    public Conflict obtenerPorId(int id) {
+        return conflictRepository.findById(id)
+                .orElseThrow(() -> new ConflictNotFoundException(id));
     }
 }
 

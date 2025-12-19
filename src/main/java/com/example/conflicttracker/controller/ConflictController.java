@@ -4,6 +4,7 @@ import com.example.conflicttracker.mapper.ConflictMapper;
 import com.example.conflicttracker.dto.ConflictRequestDto;
 import com.example.conflicttracker.entity.Conflict;
 import com.example.conflicttracker.service.ConflictService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.conflicttracker.dto.ConflictResponseDto;
 import jakarta.validation.Valid;
@@ -34,14 +35,24 @@ public class ConflictController {
 
         Conflict conflict = conflictMapper.toEntity(dto);
         Conflict guardado = conflictService.guardar(conflict);
-        return conflictMapper.toDto(guardado);
+        return conflictMapper.toResponseDto(guardado);
     }
 
     @GetMapping
     public List<ConflictResponseDto> listar() {
         return conflictService.obtenerTodos()
                 .stream()
-                .map(conflictMapper::toDto) //Convertir ls elementos
+                .map(conflictMapper::toResponseDto) //Convertir ls elementos
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ConflictResponseDto> getById(@PathVariable int id) {
+
+        Conflict conflict = conflictService.obtenerPorId(id);
+
+        ConflictResponseDto dto = conflictMapper.toResponseDto(conflict);
+
+        return ResponseEntity.ok(dto);
     }
 }
