@@ -1,0 +1,63 @@
+package com.example.conflicttracker.entity;
+
+import jakarta.persistence.*;
+import java.time.LocalDate;
+
+@Entity
+public class Event {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    private LocalDate fechaEvento;
+
+    private String lugar;
+
+    @Column(length = 2000)
+    private String descripcion;
+
+    @ManyToOne
+    @JoinColumn(name = "conflict_id", nullable = false)
+    private Conflict conflict;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public LocalDate getFechaEvento() {
+        return fechaEvento;
+    }
+
+    public void setFechaEvento(LocalDate fechaEvento) {
+        this.fechaEvento = fechaEvento;
+    }
+
+    public String getLugar() {
+        return lugar;
+    }
+
+    public void setLugar(String lugar) {
+        this.lugar = lugar;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public Conflict getConflict() {
+        return conflict;
+    }
+
+    public void setConflict(Conflict conflict) {
+        this.conflict = conflict;
+    }
+}

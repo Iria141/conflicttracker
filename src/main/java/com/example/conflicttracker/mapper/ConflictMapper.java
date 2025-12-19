@@ -10,6 +10,7 @@ import com.example.conflicttracker.dto.ConflictRequestDto;
 import com.example.conflicttracker.dto.ConflictResponseDto;
 import com.example.conflicttracker.entity.Conflict;
 import com.example.conflicttracker.entity.ConflictStatus;
+import com.example.conflicttracker.repository.ConflictRepository;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -31,7 +32,6 @@ public class ConflictMapper {
         if (conflict == null) {
             return null;
         }
-
         ConflictResponseDto dto = new ConflictResponseDto();
         dto.setId(conflict.getId());
         dto.setNombre(conflict.getNombre());
@@ -40,6 +40,13 @@ public class ConflictMapper {
         dto.setFechaInicio(conflict.getFechaInicio());
 
         return dto;
+    }
+
+    public void actualizarEntidad(Conflict conflict, ConflictRequestDto dto) {
+        conflict.setNombre(dto.getNombre());
+        conflict.setDescripcion(dto.getDescripcion());
+        conflict.setEstado(ConflictStatus.valueOf(dto.getEstado()));
+        conflict.setFechaInicio(dto.getFechaInicio());
     }
 }
 
