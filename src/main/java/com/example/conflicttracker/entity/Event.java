@@ -17,7 +17,7 @@ public class Event {
     @Column(length = 2000)
     private String descripcion;
 
-    @ManyToOne
+    @ManyToOne // Relacion *1
     @JoinColumn(name = "conflict_id", nullable = false)
     private Conflict conflict;
 

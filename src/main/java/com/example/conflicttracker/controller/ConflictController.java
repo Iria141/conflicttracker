@@ -51,12 +51,9 @@ public class ConflictController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ConflictResponseDto> getById(@PathVariable int id) {
-
+    public ResponseEntity<ConflictResponseDto> obtenerPorId(@PathVariable int id) {
         Conflict conflict = service.obtenerPorId(id);
-
         ConflictResponseDto dto = mapper.toResponseDto(conflict);
-
         return ResponseEntity.ok(dto);
     }
 
