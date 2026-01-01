@@ -21,6 +21,10 @@ public class Event {
     @JoinColumn(name = "conflict_id", nullable = false)
     private Conflict conflict;
 
+    @ManyToOne
+    @JoinColumn(name = "faction_id") // nullable = true
+    private Faction faction;
+
     public int getId() {
         return id;
     }
@@ -59,5 +63,13 @@ public class Event {
 
     public void setConflict(Conflict conflict) {
         this.conflict = conflict;
+    }
+
+    public Faction getFaction() {
+        return faction;
+    }
+
+    public void setFaction(Faction faction) {
+        this.faction = faction;
     }
 }

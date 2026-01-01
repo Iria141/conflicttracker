@@ -15,6 +15,7 @@ public class EventResponseDto {
     private String lugar;
     private String descripcion;
     private Integer conflictId; //La definimos como objeto para que pueda ser null
+    private Integer factionId;
 
 
 

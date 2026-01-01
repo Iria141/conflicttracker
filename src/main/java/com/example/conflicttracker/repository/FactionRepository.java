@@ -8,4 +8,8 @@ import java.util.List;
 public interface FactionRepository extends JpaRepository<Faction, Integer> {
 
     List<Faction> findByConflictId(int conflictId);
+
+    boolean existsByNombreAndConflictId(String nombre, Integer conflictId); //Variable para evitar nombres repetidos
+
+
 }

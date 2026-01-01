@@ -32,6 +32,12 @@ public class FactionService {
         Conflict conflict = conflictRepository.findById(conflictId)
                 .orElseThrow(() -> new ConflictNotFoundException(conflictId));
 
+        if (factionRepository.existsByNombreAndConflictId(dto.getNombre(), conflictId)) {
+            throw new IllegalArgumentException(
+                    "Ya existe un bando con ese nombre en este conflicto"
+            );
+        }
+
         Faction faction = factionMapper.toEntity(dto, conflict);
         return factionRepository.save(faction);
     }
@@ -49,6 +55,7 @@ public class FactionService {
 
     public Faction actualizar(int id, FactionRequestDto dto) {
         Faction faction = obtenerPorId(id);
+
         factionMapper.actualizarEntidad(faction, dto);
         return factionRepository.save(faction);
     }

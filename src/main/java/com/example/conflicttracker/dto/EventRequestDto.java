@@ -21,8 +21,11 @@ public class EventRequestDto {
     @NotBlank(message = "El lugar es obligatorio")
     private String lugar;
 
-    @NotBlank(message = "La descripción es obligatoria")
+    @NotBlank(message = "La descripción es obligatoria y no puede superar los 200 carácteres") @Size(max = 2000)
     private String descripcion;
+
+    private Integer factionId;
+
 
 
     public LocalDate getFechaEvento() {
@@ -49,4 +52,11 @@ public class EventRequestDto {
         this.descripcion = descripcion;
     }
 
+    public Integer getFactionId() {
+        return factionId;
+    }
+
+    public void setFactionId(Integer factionId) {
+        this.factionId = factionId;
+    }
 }

@@ -2,6 +2,9 @@ package com.example.conflicttracker.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "faction")
 public class Faction {
@@ -15,6 +18,9 @@ public class Faction {
     @ManyToOne(optional = false)
     @JoinColumn(name = "conflict_id")
     private Conflict conflict;
+
+    @OneToMany(mappedBy = "faction")
+    private List<Event> events = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -38,5 +44,13 @@ public class Faction {
 
     public void setConflict(Conflict conflict) {
         this.conflict = conflict;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
     }
 }
