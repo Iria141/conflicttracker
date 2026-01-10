@@ -3,7 +3,9 @@ package com.example.conflicttracker.entity;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "faction")
@@ -21,6 +23,14 @@ public class Faction {
 
     @OneToMany(mappedBy = "faction")
     private List<Event> events = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "faction_pais",
+            joinColumns = @JoinColumn(name = "faction_id"),
+            inverseJoinColumns = @JoinColumn(name = "country_id")
+    )
+    private Set<Country> countries = new HashSet<>();
 
     public int getId() {
         return id;
@@ -52,5 +62,13 @@ public class Faction {
 
     public void setEvents(List<Event> events) {
         this.events = events;
+    }
+
+    public Set<Country> getCountries() {
+        return countries;
+    }
+
+    public void setCountries(Set<Country> countries) {
+        this.countries = countries;
     }
 }
