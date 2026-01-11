@@ -19,9 +19,15 @@ public class Country {
     @Column(nullable = false, unique = true)
     private String codigo;
 
-    // Conflictos en los que participa el país
+    // Conflictos en los que participa el país, la hacemos bidireccional
     @ManyToMany(mappedBy = "countries")
     private Set<Conflict> conflicts = new HashSet<>();
+    public Set<Conflict> getConflictos() {
+        return conflicts;
+    }
+    public void setConflictos(Set<Conflict> conflictos) {
+        this.conflicts = conflictos;
+    }
 
     // Facciones que apoya el país
     @ManyToMany(mappedBy = "countries")
@@ -65,5 +71,10 @@ public class Country {
 
     public void setFactions(Set<Faction> factions) {
         this.factions = factions;
+    }
+
+    public void addConflicto(Conflict conflict) {
+        conflicts.add(conflict);
+        conflict.getCountries().add(this);
     }
 }

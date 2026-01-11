@@ -87,5 +87,15 @@ public class Conflict {
     public void setCountries(Set<Country> countries) {
         this.countries = countries;
     }
+
+    public void addPais(Country country) {
+        countries.add(country);
+        country.getConflictos().add(this);
+    }
+
+    public void removePais(Country country) {
+        countries.remove(country);
+        country.getConflictos().remove(this);
+    }
 }
 

@@ -1,8 +1,10 @@
 package com.example.conflicttracker.service;
 
+import com.example.conflicttracker.dto.ConflictResponseDto;
 import com.example.conflicttracker.dto.CountryRequestDto;
 import com.example.conflicttracker.dto.CountryResponseDto;
 import com.example.conflicttracker.entity.Country;
+import com.example.conflicttracker.mapper.ConflictMapper;
 import com.example.conflicttracker.mapper.CountryMapper;
 import com.example.conflicttracker.repository.CountryRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -16,10 +18,12 @@ public class CountryService {
 
     private final CountryRepository countryRepository;
     private final CountryMapper countryMapper;
+    private final ConflictMapper conflictMapper;
 
-    public CountryService(CountryRepository countryRepository, CountryMapper countryMapper) {
+    public CountryService(CountryRepository countryRepository, CountryMapper countryMapper, ConflictMapper conflictMapper) {
         this.countryRepository = countryRepository;
         this.countryMapper = countryMapper;
+        this.conflictMapper = conflictMapper;
     }
 
     public List<CountryResponseDto> obtenerTodos() {
@@ -54,4 +58,16 @@ public class CountryService {
         }
         countryRepository.deleteById(id);
     }
+
+    //Extra
+
+    public List<ConflictResponseDto> obtenerConflictosPorCodigoPais(String codigo) {
+        Country country = countryRepository.findByCodigo(codigo)
+                .orElseThrow(() -> new RuntimeException("No existe el país con código: " + codigo));
+
+        return country.getConflicts().stream()
+                .map(conflictMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
+
 }

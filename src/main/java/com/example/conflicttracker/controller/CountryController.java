@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("(/conflicts/{conflictId}/countries")
+@RequestMapping("/conflicts/{conflictId}/countries")
 public class CountryController {
 
     private final CountryService countryService;
@@ -30,7 +30,8 @@ public class CountryController {
     }
 
     @PostMapping
-    public CountryResponseDto crear(@Valid @RequestBody CountryRequestDto dto) {
+    public CountryResponseDto crear(
+            @Valid @RequestBody CountryRequestDto dto) {
         return countryService.crear(dto);
     }
 

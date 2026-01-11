@@ -1,4 +1,4 @@
-package com.example.conflicttracker.config;
+package com.example.conflicttracker.Init;
 
 import com.example.conflicttracker.entity.*;
 import com.example.conflicttracker.repository.ConflictRepository;
@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDate;
-
 
 //Aqui añadimos unos datos iniciales para no estar incluyendo en cada reinicio informa
 
@@ -63,8 +62,15 @@ public class DataInitializer {
             conflict2.setEstado(ConflictStatus.ACTIVO);
             conflict2.setFechaInicio(LocalDate.of(2022, 2, 24));
 
+            addCountryToConflict(conflict1, spain);
+            addCountryToConflict(conflict2, france);
+            addCountryToConflict(conflict2, ukraine);
+            // Relación Conflict <-> Country
+            // al añadir mappedBy en Country, esto por sí solo guarda la tabla intermedia, pero
+            //no sincroniza la colección en Country en memoria. Por eso sincronizamos ambos lados.
             conflictRepository.save(conflict1);
             conflictRepository.save(conflict2);
+
 
             //Bandos son los "actores" del conflicto que se relacionan con los paises
             Faction alfa = new Faction();
@@ -88,41 +94,30 @@ public class DataInitializer {
             Event event1 = new Event();
             event1.setFechaEvento(LocalDate.now().minusDays(10));
             event1.setDescripcion("Primera confrontación");
+            event1.setLugar("Amsterdan");
             event1.setConflict(conflict1);
 
             Event event2 = new Event();
             event2.setFechaEvento(LocalDate.now().minusDays(2));
             event2.setDescripcion("Comienzo de las negociaciones diplomáticas");
+            event2.setLugar("París");
             event2.setConflict(conflict1);
 
             Event event3 = new Event();
             event3.setFechaEvento(LocalDate.now().minusDays(2));
             event3.setDescripcion("Tropas rusas entran en territorio Ucraniano");
+            event3.setLugar("Fronrea este Ucrania");
             event3.setConflict(conflict2);
 
             eventRepository.save(event1);
             eventRepository.save(event2);
             eventRepository.save(event3);
 
-
-            //Relaciones, que completan las tabla intermedias (Pais/Conflicto y Pais/Faction)
-
-            conflict1.getCountries().add(spain);
-            conflict2.getCountries().add(france);
-            conflict2.getCountries().add(ukraine);
-
-            alfa.getCountries().add(spain);
-            beta.getCountries().add(france);
-            gamma.getCountries().add(ukraine);
-            alfa.getCountries().add(russia);
-
-            conflictRepository.save(conflict2);
-            conflictRepository.save(conflict1);
-            factionRepository.save(alfa);
-            factionRepository.save(beta);
-            factionRepository.save(gamma);
-
             System.out.println("Datos de prueba cargados correctamente");
         };
+    } // mantiene sincronizados ambos lados (Country.getConflicts()
+    private void addCountryToConflict(Conflict conflict, Country country) {
+        conflict.getCountries().add(country);
+        country.getConflicts().add(conflict);
     }
 }
