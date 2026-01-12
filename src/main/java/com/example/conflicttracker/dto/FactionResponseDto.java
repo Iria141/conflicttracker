@@ -1,15 +1,15 @@
 package com.example.conflicttracker.dto;
 
 public class FactionResponseDto {
-    private Integer id;
+    private Long id;
     private String nombre;
     private Integer conflictId;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

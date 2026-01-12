@@ -12,7 +12,7 @@ import java.util.Set;
 public class Faction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(nullable = false)
     private String nombre;
@@ -32,11 +32,11 @@ public class Faction {
     )
     private Set<Country> countries = new HashSet<>();
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

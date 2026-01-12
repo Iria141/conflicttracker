@@ -1,7 +1,5 @@
 package com.example.conflicttracker.dto;
 
-import com.example.conflicttracker.entity.ConflictStatus;
-
 import java.time.LocalDate;
 
 
@@ -10,7 +8,7 @@ Es la respuesta, salida.
  */
 public class EventResponseDto {
 
-    private int id;
+    private Long id;
     private LocalDate fechaEvento;
     private String lugar;
     private String descripcion;
@@ -22,11 +20,11 @@ public class EventResponseDto {
     public EventResponseDto() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

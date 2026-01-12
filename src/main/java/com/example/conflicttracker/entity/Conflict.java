@@ -13,7 +13,7 @@ public class Conflict {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     /* Id: clave primaria
     * GeneratedValue : genera solo el codigo */
-    private Integer id;
+    private Long id;
     private String nombre;
     private LocalDate fechaInicio;
 
@@ -36,11 +36,11 @@ public class Conflict {
         //Constructor vacio necesario para el JPA
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -76,7 +76,7 @@ public class Conflict {
         this.descripcion = descripcion;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
