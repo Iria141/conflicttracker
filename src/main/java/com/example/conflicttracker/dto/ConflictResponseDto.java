@@ -10,7 +10,7 @@ Es la respuesta, salida.
  */
 public class ConflictResponseDto {
 
-    private int id;
+    private Long id;
     private String nombre;
     private String descripcion;
     private String estado;
@@ -22,11 +22,11 @@ public class ConflictResponseDto {
     public ConflictResponseDto() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -60,5 +60,13 @@ public class ConflictResponseDto {
 
     public void setFechaInicio(LocalDate fechaInicio) {
         this.fechaInicio = fechaInicio;
+    }
+
+    public ConflictStatus getConflictStatus() {
+        return conflictStatus;
+    }
+
+    public void setConflictStatus(ConflictStatus conflictStatus) {
+        this.conflictStatus = conflictStatus;
     }
 }

@@ -2,7 +2,7 @@ package com.example.conflicttracker.exception;
 
 public class ConflictNotFoundException extends RuntimeException {
 
-    public ConflictNotFoundException(int id) {
+    public ConflictNotFoundException(Long id) {
         super("No existe ningún conflicto con id " + id);
     }
 }

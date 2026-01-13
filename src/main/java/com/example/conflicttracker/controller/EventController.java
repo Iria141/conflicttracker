@@ -36,7 +36,7 @@ public class EventController {
 
     @PostMapping
     public EventResponseDto crear(
-            @PathVariable int conflictId,
+            @PathVariable Long conflictId,
             @Valid @RequestBody EventRequestDto dto
     ) {
         Event event = eventService.crear(conflictId, dto);
@@ -45,7 +45,7 @@ public class EventController {
 
     @GetMapping
     public List<EventResponseDto> listarPorConflicto(
-            @PathVariable int conflictId
+            @PathVariable Long conflictId
     ) {
         return eventService.obtenerPorConflicto(conflictId)
                 .stream()
@@ -55,8 +55,8 @@ public class EventController {
 
     @GetMapping("/{eventId}")
     public EventResponseDto obtenerPorId(
-            @PathVariable int conflictId,
-            @PathVariable int eventId
+            @PathVariable Long conflictId,
+            @PathVariable Long eventId
     ) {
         Event event = eventService.obtenerPorId(eventId);
         return eventMapper.toResponseDto(event);
@@ -64,8 +64,8 @@ public class EventController {
 
     @PutMapping("/{eventId}")
     public EventResponseDto actualizar(
-            @PathVariable int conflictId,
-            @PathVariable int eventId,
+            @PathVariable Long conflictId,
+            @PathVariable Long eventId,
             @Valid @RequestBody EventRequestDto dto
     ) {
         Event event = eventService.actualizar(eventId, dto);
@@ -74,8 +74,8 @@ public class EventController {
 
     @DeleteMapping("/{eventId}")
     public void eliminar(
-            @PathVariable int conflictId,
-            @PathVariable int eventId
+            @PathVariable Long conflictId,
+            @PathVariable Long eventId
     ) {
         eventService.eliminar(eventId);
     }

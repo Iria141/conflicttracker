@@ -38,7 +38,7 @@ public class EventService {
         this.factionRepository = factionRepository;
     }
 
-    public Event crear(int conflictId, EventRequestDto dto) {
+    public Event crear(Long conflictId, EventRequestDto dto) {
         Conflict conflict = conflictRepository.findById(conflictId)
                 .orElseThrow(() ->
                         new ConflictNotFoundException(conflictId)
@@ -64,18 +64,19 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    public List<Event> obtenerPorConflicto(int conflictId) {
+    public List<Event> obtenerPorConflicto(Long conflictId) {
+
         return eventRepository.findByConflictId(conflictId);
     }
 
-    public Event obtenerPorId(int eventId) {
+    public Event obtenerPorId(Long eventId) {
         return eventRepository.findById(eventId)
                 .orElseThrow(() ->
                         new RuntimeException("Evento no encontrado con id " + eventId)
                 );
     }
 
-    public Event actualizar(int eventId, EventRequestDto dto) {
+    public Event actualizar(Long eventId, EventRequestDto dto) {
         Event event = obtenerPorId(eventId);
 
         Faction faction = null;
@@ -90,7 +91,7 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    public void eliminar(int eventId) {
+    public void eliminar(Long eventId) {
         Event event = obtenerPorId(eventId);
         eventRepository.delete(event);
     }

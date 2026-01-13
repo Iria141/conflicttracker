@@ -1,5 +1,6 @@
 package com.example.conflicttracker.controller;
 
+import com.example.conflicttracker.entity.ConflictStatus;
 import com.example.conflicttracker.mapper.ConflictMapper;
 import com.example.conflicttracker.dto.ConflictRequestDto;
 import com.example.conflicttracker.entity.Conflict;
@@ -27,7 +28,8 @@ public class ConflictController {
 
     public ConflictController(
             ConflictService conflictService,
-            ConflictMapper conflictMapper, ConflictRepository conflictRepository) {
+            ConflictMapper conflictMapper,
+            ConflictRepository conflictRepository) {
         this.service = conflictService;
         this.mapper = conflictMapper;
         this.conflictRepository = conflictRepository;
@@ -43,15 +45,35 @@ public class ConflictController {
     }
 
     @GetMapping
-    public List<ConflictResponseDto> listar() {
-        return service.obtenerTodos()
+    public List<ConflictResponseDto> listar(@RequestParam(required = false) String status) {
+
+       // System.out.println("STATUS RAW = [" + status + "]"); --> comprobacion de como llega el filtro
+
+        if (status == null || status.trim().isEmpty()) {
+            return service.obtenerTodos()
+                    .stream()
+                    .map(mapper::toResponseDto) //Convertir ls elementos
+                    .collect(Collectors.toList());
+        }
+        ConflictStatus parsed;
+        try {
+            parsed = parseStatus(status);
+        } catch (IllegalArgumentException ex) {
+            throw new org.springframework.web.server.ResponseStatusException(
+                    org.springframework.http.HttpStatus.BAD_REQUEST,
+                    "Estado inválido: " + status
+            );
+        }
+
+        return service.listarPorEstado(parsed)
                 .stream()
-                .map(mapper::toResponseDto) //Convertir ls elementos
+                .map(mapper::toResponseDto)
                 .collect(Collectors.toList());
     }
 
+
     @GetMapping("/{id}")
-    public ResponseEntity<ConflictResponseDto> obtenerPorId(@PathVariable int id) {
+    public ResponseEntity<ConflictResponseDto> obtenerPorId(@PathVariable Long id) {
         Conflict conflict = service.obtenerPorId(id);
         ConflictResponseDto dto = mapper.toResponseDto(conflict);
         return ResponseEntity.ok(dto);
@@ -59,7 +81,7 @@ public class ConflictController {
 
     @PutMapping("/{id}")
     public ConflictResponseDto actualizar1(
-            @PathVariable int id,
+            @PathVariable Long id,
             @Valid @RequestBody ConflictRequestDto dto
     ) {
         Conflict actualizado = service.actualizar(id, dto);
@@ -68,9 +90,19 @@ public class ConflictController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void eliminar(@PathVariable int id) {
+    public void eliminar(@PathVariable Long id) {
         service.eliminar(id);
     }
 
+    private ConflictStatus parseStatus(String status) {
+        String s = status.trim().toUpperCase();
 
+        // Soporta ambos valores ACTIVE y/o ACtiVO
+        return switch (s) {
+            case "ACTIVE" -> ConflictStatus.ACTIVO;
+            case "FROZEN" -> ConflictStatus.CONGELADO;
+            case "ENDED" -> ConflictStatus.FINALIZADO;
+            default -> ConflictStatus.valueOf(s);
+        };
+    }
 }

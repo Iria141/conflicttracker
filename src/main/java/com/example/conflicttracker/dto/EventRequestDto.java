@@ -3,7 +3,6 @@ package com.example.conflicttracker.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
@@ -24,7 +23,7 @@ public class EventRequestDto {
     @NotBlank(message = "La descripción es obligatoria y no puede superar los 200 carácteres") @Size(max = 2000)
     private String descripcion;
 
-    private Integer factionId;
+    private Long factionId;
 
 
 
@@ -52,11 +51,11 @@ public class EventRequestDto {
         this.descripcion = descripcion;
     }
 
-    public Integer getFactionId() {
+    public Long getFactionId() {
         return factionId;
     }
 
-    public void setFactionId(Integer factionId) {
+    public void setFactionId(Long factionId) {
         this.factionId = factionId;
     }
 }

@@ -12,8 +12,8 @@ public class EventResponseDto {
     private LocalDate fechaEvento;
     private String lugar;
     private String descripcion;
-    private Integer conflictId; //La definimos como objeto para que pueda ser null
-    private Integer factionId;
+    private Long conflictId; //La definimos como objeto para que pueda ser null
+
 
 
 
@@ -52,11 +52,11 @@ public class EventResponseDto {
         this.descripcion = descripcion;
     }
 
-    public int getConflictId() {
+    public Long getConflictId() {
         return conflictId;
     }
 
-    public void setConflictId(int conflictId) {
+    public void setConflictId(Long conflictId) {
         this.conflictId = conflictId;
     }
 

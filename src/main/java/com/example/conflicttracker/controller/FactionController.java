@@ -25,7 +25,7 @@ public class FactionController {
 
     @PostMapping
     public FactionResponseDto crear(
-            @PathVariable int conflictId,
+            @PathVariable Long conflictId,
             @Valid @RequestBody FactionRequestDto dto) {
         return factionMapper.toResponseDto(
                 factionService.crear(conflictId, dto)
@@ -34,7 +34,7 @@ public class FactionController {
 
     @GetMapping
     public List<FactionResponseDto> listar(
-            @PathVariable int conflictId) {
+            @PathVariable Long conflictId) {
         return factionService.listarPorConflicto(conflictId)
                 .stream()
                 .map(factionMapper::toResponseDto)
@@ -43,7 +43,7 @@ public class FactionController {
 
     @GetMapping("/{factionId}")
     public FactionResponseDto obtener(
-            @PathVariable int factionId) {
+            @PathVariable Long factionId) {
         return factionMapper.toResponseDto(
                 factionService.obtenerPorId(factionId)
         );
@@ -51,7 +51,7 @@ public class FactionController {
 
     @PutMapping("/{factionId}")
     public FactionResponseDto actualizar(
-            @PathVariable int factionId,
+            @PathVariable Long factionId,
             @Valid @RequestBody FactionRequestDto dto) {
         return factionMapper.toResponseDto(
                 factionService.actualizar(factionId, dto)
@@ -59,7 +59,7 @@ public class FactionController {
     }
 
     @DeleteMapping("/{factionId}")
-    public void eliminar(@PathVariable int factionId) {
+    public void eliminar(@PathVariable Long factionId) {
         factionService.eliminar(factionId);
     }
 }

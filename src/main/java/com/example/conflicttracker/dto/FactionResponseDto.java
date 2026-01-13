@@ -3,7 +3,7 @@ package com.example.conflicttracker.dto;
 public class FactionResponseDto {
     private Long id;
     private String nombre;
-    private Integer conflictId;
+    private Long conflictId;
 
     public Long getId() {
         return id;
@@ -21,11 +21,11 @@ public class FactionResponseDto {
         this.nombre = nombre;
     }
 
-    public Integer getConflictId() {
+    public Long getConflictId() {
         return conflictId;
     }
 
-    public void setConflictId(Integer conflictId) {
+    public void setConflictId(Long conflictId) {
         this.conflictId = conflictId;
     }
 }

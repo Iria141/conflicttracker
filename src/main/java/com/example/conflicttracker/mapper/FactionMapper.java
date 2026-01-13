@@ -27,6 +27,7 @@ public class FactionMapper {
     }
 
     public void actualizarEntidad(Faction faction, FactionRequestDto dto) {
+
         faction.setNombre(dto.getNombre());
     }
 

@@ -10,7 +10,6 @@ import com.example.conflicttracker.dto.ConflictRequestDto;
 import com.example.conflicttracker.dto.ConflictResponseDto;
 import com.example.conflicttracker.entity.Conflict;
 import com.example.conflicttracker.entity.ConflictStatus;
-import com.example.conflicttracker.repository.ConflictRepository;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -5,11 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface FactionRepository extends JpaRepository<Faction, Integer> {
+public interface FactionRepository extends JpaRepository<Faction, Long> {
 
-    List<Faction> findByConflictId(int conflictId);
+    List<Faction> findByConflictId(Long conflictId);
 
-    boolean existsByNombreAndConflictId(String nombre, Integer conflictId); //Variable para evitar nombres repetidos
-
+    boolean existsByNombreAndConflictId(String nombre, Long conflictId); //Variable para evitar nombres repetidos
 
 }

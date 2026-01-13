@@ -28,7 +28,7 @@ public class FactionService {
         this.factionMapper = factionMapper;
     }
 
-    public Faction crear(int conflictId, FactionRequestDto dto) {
+    public Faction crear(Long conflictId, FactionRequestDto dto) {
         Conflict conflict = conflictRepository.findById(conflictId)
                 .orElseThrow(() -> new ConflictNotFoundException(conflictId));
 
@@ -42,25 +42,25 @@ public class FactionService {
         return factionRepository.save(faction);
     }
 
-    public List<Faction> listarPorConflicto(int conflictId) {
+    public List<Faction> listarPorConflicto(Long conflictId) {
         return factionRepository.findByConflictId(conflictId);
     }
 
-    public Faction obtenerPorId(int id) {
+    public Faction obtenerPorId(Long id) {
         return factionRepository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException("Facción no encontrada con id " + id)
                 );
     }
 
-    public Faction actualizar(int id, FactionRequestDto dto) {
+    public Faction actualizar(Long id, FactionRequestDto dto) {
         Faction faction = obtenerPorId(id);
 
         factionMapper.actualizarEntidad(faction, dto);
         return factionRepository.save(faction);
     }
 
-    public void eliminar(int id) {
+    public void eliminar(Long id) {
         Faction faction = obtenerPorId(id);
         factionRepository.delete(faction);
     }
