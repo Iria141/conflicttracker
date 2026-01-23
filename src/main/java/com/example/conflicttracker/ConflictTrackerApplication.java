@@ -20,3 +20,8 @@ public class ConflictTrackerApplication {
 	}
 
 }
+
+
+/*  Para comprobar el Index accedemos a /api/v1/index.html,
+que realiza una petición fetch a GET /api/v1/conflicts y
+muestra el resultado dinámicamente.*/

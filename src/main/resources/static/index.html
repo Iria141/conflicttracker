@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Conflictos</title>
+</head>
+<body>
+<h1>Lista de conflictos</h1>
+
+<p id="estado">Cargando...</p>
+<ul id="lista"></ul>
+<pre id="error" style="color: red;"></pre>
+
+<script>
+    const estado = document.getElementById("estado");
+    const lista = document.getElementById("lista");
+    const errorBox = document.getElementById("error");
+
+    // OJO: como estás dentro de /api/v1/index.html, esta ruta relativa va a /api/v1/conflicts
+    fetch("conflicts")
+        .then(res => {
+            if (!res.ok) throw new Error("HTTP " + res.status + " " + res.statusText);
+            return res.json();
+        })
+        .then(conflicts => {
+            estado.textContent = "Recibidos: " + conflicts.length;
+
+            conflicts.forEach(c => {
+                const li = document.createElement("li");
+
+                // Por si tus campos se llaman distinto (nombre/name, estado/status)
+                const nombre = c.nombre ?? c.name ?? "(sin nombre)";
+                const estadoVal = c.estado ?? c.status ?? "(sin estado)";
+
+                li.textContent = nombre + " - " + estadoVal;
+                lista.appendChild(li);
+            });
+        })
+        .catch(err => {
+            estado.textContent = "";
+            errorBox.textContent = "Error cargando /conflicts: " + err.message;
+        });
+</script>
+</body>
+</html>
