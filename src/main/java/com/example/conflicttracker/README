@@ -1,0 +1,102 @@
+---** Conflict Tracker API **---
+
+API REST desarrollada con Spring Boot 3 para la gestión de
+conflictos bélicos, países involucrados, bandos y eventos clave.
+
+El proyecto fse ha desarrolado con arquitectura por capas, utilizando
+ DTOs, Spring Data JPA y una base de datos H2 para desarrollo.
+
+
+## Tecnologías utilizadas
+
+* Java 17+
+* Spring Boot 3
+* Spring Data JPA
+* H2 Database
+* Maven
+* GitHub
+
+## Arquitectura
+
+El proyecto sigue una arquitectura por capas:
+
+* Controller: recibe las peticiones HTTP (GET/POST/PUT/DELETE) y devuelve respuestas HTTP (JSON), expone los endpoints REST. Sin lógica de negocio.
+* Service: contiene la lógica de negocio (qué y cómo hacer).
+* Repository: acceso a datos con Spring Data JPA. Es la entrada a la BD.
+* Entity; modelo de datos, representa sus tablas y las relaciones JPA.
+* DTOs: desacoplan el modelo interno de la API, es el enlace para no exponer las entidades.
+* Mapper: conversión entre entidades y DTOs, evita qeu se mezcle la lógica de conversión.
+
+
+## Iniciar proyecto
+
+    1- Clonar el repositorio
+https://github.com/Iria141/conflicttracker.git
+
+    2- Ejecutar la aplicación
+1- spring-boot:run
+2- http://localhost:8080/api/v1 en la barra de direcciones
+
+    3- Frontend de prueba
+
+La aplicación incluye un frontend básico en HTML con JavaScript nativo. Para acceder:
+http://localhost:8080/api/v1/index.html.
+Esta página realiza una petición `fetch` al endpoint `GET /api/v1/conflicts`
+y muestra los resultados.
+
+
+## Endpoints principales
+
+Todos los endpoints están disponibles con el prefijo:    /api/v1
+
+1- Obtener todos los conflictos
+GET /api/v1/conflicts
+
+** Ejemplo con curl: **
+curl http://localhost:8080/api/v1/conflicts
+
+---
+
+2- Filtrar conflictos por estado
+GET /api/v1/conflicts?status=ACTIVE
+
+* `ACTIVE` / `ACTIVO`
+* `FROZEN` / `CONGELADO`
+* `ENDED` / `FINALIZADO`
+
+**Ejemplo con curl:**
+curl "http://localhost:8080/api/v1/conflicts?status=ACTIVE"
+
+
+3- Crear un nuevo conflicto
+POST /api/v1/conflicts
+
+**Ejemplo con curl:**
+curl -X POST http://localhost:8080/api/v1/conflicts                         //Importante: se añade la -X porque si no por defecto usa GET
+{
+    "nombre": "Conflicto de prueba",
+    "fechaInicio": "2025-01-01",
+    "estado": "ACTIVO",
+    "descripcion": "Ejemplo creado con curl"
+  }
+
+4- Obtener conflictos por país (endpoint extra)
+GET /api/v1/countries/{code}/conflicts
+
+**Ejemplo con curl:**
+curl http://localhost:8080/api/v1/countries/ES/conflicts
+
+---
+
+## Base de datos
+
+Durante el desarrollo se utiliza H2 en memoria.
+
+* Consola H2:
+http://localhost:8080/api/v1/h2-console
+
+
+## Añadidos
+
+* Los datos iniciales se cargan automáticamente al arrancar la aplicación.
+* El proyecto está preparado para adaptarse a una BD PostgreSQL.
