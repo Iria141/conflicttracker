@@ -38,11 +38,23 @@ https://github.com/Iria141/conflicttracker.git
 2- http://localhost:8080/api/v1 en la barra de direcciones
 
     3- Frontend de prueba
-
 La aplicación incluye un frontend básico en HTML con JavaScript nativo. Para acceder:
 http://localhost:8080/api/v1/index.html.
 Esta página realiza una petición `fetch` al endpoint `GET /api/v1/conflicts`
 y muestra los resultados.
+
+    4- interfaz Web
+Como ampliacion del proyecto se ha reañizado una capa de presentación web usando thymeleaf,
+demostrando que el mismo motor de negocio (Services) sirve tanto a la API REST como a una
+interfaz web clásica. LAs funcionañidades implementadas son:
+*Listado de conflicto mostrado en una tabla, contafos de los conflictos mostrados y un
+flitro por estado.
+*Creacion de conflicto, formulario de validacion mediante @valid, Uso de th:object y
+ th:field y mensajes de error mostrados en la propia vista.
+*Mensahe de confirmación tras guardar quedando en ña vista del formulario hasta que el
+usuario decida.
+*Navegación entre listados y formulario, con un botón para crear nuevos conflictos.
+
 
 
 ## Endpoints principales

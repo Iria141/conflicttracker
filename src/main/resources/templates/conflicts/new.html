@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Nuevo conflicto</title>
+        <style>
+            body { font-family: system-ui, Arial, sans-serif; margin: 24px; }
+            .field { margin: 12px 0; }
+            label { display:block; margin-bottom: 6px; }
+            input, select, textarea { width: 420px; padding: 8px; }
+            .error { color: #b00020; font-size: 0.95rem; }
+            a { margin-right: 12px; }
+        </style>
+    </head>
+
+    <body>
+        <h1>Crear conflicto</h1>
+
+        <div th:if="${success}"
+                 style="
+           margin: 16px 0;
+           padding: 12px;
+           border: 1px solid #c8e6c9;
+           background: #e8f5e9;
+           border-radius: 6px;
+           text-align: center;
+           font-weight: 500;
+         ">
+                <span th:text="${success}">OK</span>
+        </div>
+
+        <form th:action="@{/web/conflicts}" th:object="${conflictForm}" method="post">
+
+            <div class="field">
+                <label>Nombre</label>
+                <input type="text" th:field="*{nombre}"/>
+                <div class="error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+            </div>
+
+            <div class="field">
+                <label>Fecha inicio</label>
+                <input type="date" th:field="*{fechaInicio}"/>
+                <div class="error" th:if="${#fields.hasErrors('fechaInicio')}" th:errors="*{fechaInicio}"></div>
+            </div>
+
+            <div class="field">
+                <label>Estado</label>
+                <select th:field="*{estado}">
+                    <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
+                </select>
+                <div class="error" th:if="${#fields.hasErrors('estado')}" th:errors="*{estado}"></div>
+            </div>
+
+            <div class="field">
+                <label>Descripción</label>
+                <textarea rows="4" th:field="*{descripcion}"></textarea>
+                <div class="error" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
+            </div>
+
+            <button type="submit"
+                    style="
+                  padding: 10px 18px;
+                  background: #1976d2;
+                  color: white;
+                  border: none;
+                  border-radius: 10px;
+                  font-size: 1rem;
+                  font-weight: 500;
+                  cursor: pointer;
+                ">
+                        Guardar
+            </button>
+
+
+            <div style="text-align: center; margin: 16px 0;">
+                <a th:href="@{/web/conflicts}"
+                   style="
+                   display: inline-block;
+                   padding: 8px 14px;
+                   background: #eeeeee;
+                   color: #333;
+                   text-decoration: none;
+                   border-radius: 10px;
+                   font-weight: 500;
+                 ">
+                    Volver
+                </a>
+            </div>
+
+
+        </form>
+    </body>
+</html>

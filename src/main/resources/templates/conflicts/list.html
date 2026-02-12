@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Conflictos</title>
+        <style>
+            body { font-family: system-ui, Arial, sans-serif; margin: 24px; }
+            table { border-collapse: collapse; width: 100%; }
+            th, td { border: 1px solid #ddd; padding: 10px; vertical-align: top; }
+            th { background: #f6f6f6; text-align: left; }
+            .muted { color: #666; }
+        </style>
+    </head>
+    <body>
+        <h1>Listado de conflictos</h1>
+
+        <form th:action="@{/web/conflicts}" method="get" style="display:flex; gap:8px; align-items:center;">
+            <label for="status" class="muted">Filtrar:</label>
+            <select id="status" name="status" onchange="this.form.submit()">
+                <option value="" th:selected="${selectedStatus == ''}">Todos</option>
+
+                <!-- enunciado -->
+                <option value="ACTIVE" th:selected="${selectedStatus == 'ACTIVE'}">ACTIVE</option>
+                <option value="FROZEN" th:selected="${selectedStatus == 'FROZEN'}">FROZEN</option>
+                <option value="ENDED"  th:selected="${selectedStatus == 'ENDED'}">ENDED</option>
+                <!-- enums -->
+                <option value="ACTIVO" th:selected="${selectedStatus == 'ACTIVO'}">ACTIVO</option>
+                <option value="CONGELADO" th:selected="${selectedStatus == 'CONGELADO'}">CONGELADO</option>
+                <option value="FINALIZADO" th:selected="${selectedStatus == 'FINALIZADO'}">FINALIZADO</option>
+            </select>
+
+            <noscript>
+                <button type="submit">Aplicar</button>
+            </noscript>
+        </form>
+
+        <div th:if="${success}"
+             style="margin: 12px 0; padding: 10px;
+            border: 1px solid #c8e6c9;
+            background: #e8f5e9;
+            border-radius: 6px;">
+            <span th:text="${success}">OK</span>
+        </div>
+
+
+        <table>
+            <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Fecha inicio</th>
+                <th>Estado</th>
+                <th>Descripción (corta)</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="c : ${conflicts}">
+                <td th:text="${c.nombre}">Nombre</td>
+                <td th:text="${c.fechaInicio}">2026-01-01</td>
+                <td th:text="${c.estado}">ACTIVO</td>
+                <td th:text="${#strings.abbreviate(c.descripcion, 80)}">Desc</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <p class="muted" style="text-align: right;">
+            Total: <span th:text="${#lists.size(conflicts)}">0</span>
+        </p>
+
+        <div style="margin: 25px 0;">
+            <a th:href="@{/web/conflicts/new}"
+               style="
+                   padding: 8px 14px;
+                   background: #1976d2;
+                   color: white;
+                   text-decoration: none;
+                   border-radius: 10px;
+                   font-weight: 500;
+                 ">
+                Nuevo conflicto
+            </a>
+        </div>
+
+
+    </body>
+</html>

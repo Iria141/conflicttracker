@@ -62,14 +62,31 @@ public class DataInitializer {
             conflict2.setEstado(ConflictStatus.ACTIVO);
             conflict2.setFechaInicio(LocalDate.of(2022, 2, 24));
 
+            Conflict conflict3 = new Conflict();
+            conflict3.setNombre("Conflicto del Sáhara Occidental");
+            conflict3.setDescripcion("Disputa territorial prolongada en el norte de África");
+            conflict3.setEstado(ConflictStatus.CONGELADO);
+            conflict3.setFechaInicio(LocalDate.of(1975, 11, 14));
+
+            Conflict conflict4 = new Conflict();
+            conflict4.setNombre("Guerra de los Balcanes");
+            conflict4.setDescripcion("Conflictos armados ocurridos tras la desintegración de Yugoslavia");
+            conflict4.setEstado(ConflictStatus.FINALIZADO);
+            conflict4.setFechaInicio(LocalDate.of(1991, 6, 25));
+
             addCountryToConflict(conflict1, spain);
             addCountryToConflict(conflict2, france);
             addCountryToConflict(conflict2, ukraine);
+            addCountryToConflict(conflict3, spain);
+            addCountryToConflict(conflict3, france);
+            addCountryToConflict(conflict4, france);
             // Relación Conflict <-> Country
             // al añadir mappedBy en Country, esto por sí solo guarda la tabla intermedia, pero
             //no sincroniza la colección en Country en memoria. Por eso sincronizamos ambos lados.
             conflictRepository.save(conflict1);
             conflictRepository.save(conflict2);
+            conflictRepository.save(conflict3);
+            conflictRepository.save(conflict4);
 
 
             //Bandos son los "actores" del conflicto que se relacionan con los paises
