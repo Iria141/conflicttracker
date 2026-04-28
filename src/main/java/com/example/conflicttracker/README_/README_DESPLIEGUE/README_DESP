@@ -1,0 +1,147 @@
+# README DESPLIEGUE — Conflict Tracker
+
+## 🌐 URL Pública del Frontend
+
+**  https://conflicttracker-frontend.vercel.app   **
+
+## Esquema de Arquitectura
+
+┌─────────────────────────────────────────────────────────────┐
+│                        USUARIO                              │
+└──────────────────────────┬──────────────────────────────────┘
+                           │ HTTPS
+                           ▼
+┌─────────────────────────────────────────────────────────────┐
+│               FRONTEND — Vercel                             │
+│         conflicttracker-frontend.vercel.app                 │
+│                                                             │
+│  Vue 3 + Pinia + Vue Router                                 │
+│  Build: Vite                                                │
+│  SPA Routing: vercel.json (rewrites → index.html)           │
+│  Variables: VITE_API_URL                                    │
+└──────────────────────────┬──────────────────────────────────┘
+                           │ REST API (HTTPS)
+                           ▼
+┌─────────────────────────────────────────────────────────────┐
+│               BACKEND — Railway                             │
+│    conflicttracker-production-d413.up.railway.app           │
+│                                                             │
+│  Spring Boot 3 + Java 21                                    │
+│  Context path: /api/v1                                      │
+│  CORS configurado para dominio de Vercel                    │
+│  Variables: DB_URL, DB_USERNAME, DB_PASSWORD, PORT          │
+└──────────────────────────┬──────────────────────────────────┘
+                           │ JDBC (red interna Railway)
+                           ▼
+┌─────────────────────────────────────────────────────────────┐
+│               BASE DE DATOS — Railway                       │
+│              PostgreSQL 18.3                                │
+│       Host: postgres.railway.internal:5432                  │
+│       Base de datos: railway                                │
+└─────────────────────────────────────────────────────────────┘
+
+
+
+## Variables de Entorno
+
+### Backend (Railway — Service Variables)
+
+| `DB_URL` | URL JDBC de PostgreSQL sin usuario ni contraseña | `jdbc:postgresql://postgres.railway.internal:5432/railway?sslmode=require` |
+| `DB_USERNAME` | Usuario de la base de datos | 'postgres' |
+| `DB_PASSWORD` | Contraseña de la base de datos | 'tu_password' |
+| `PORT` | Puerto del servidor (Railway lo inyecta automáticamente) | '8080' |
+
+>>> Importante: La 'DB_URL' debe empezar por `jdbc:postgresql://` y NO debe incluir usuario ni contraseña en la propia URL. Railway proporciona
+la URL en formato genérico (`postgresql://user:pass@host/db`) — hay que transformarla al formato JDBC separando las credenciales.
+
+### Frontend (Vercel — Environment Variables)
+
+| `VITE_API_URL` | URL base de la API del backend | `https://conflicttracker-production-d413.up.railway.app/api/v1` |
+
+Para desarrollo local, se crea el archivo `.env` en la raíz del proyecto frontend:
+VITE_API_URL=http://localhost:8080/api/v1
+
+
+## Errores encontradosdurante el Despliegue
+
+🔴 Error 1 — URL de base de datos incorrecta (  Adjunta imagen en carpeta)
+  Error: El backend no arrancaba en Railway.
+  Driver org.postgresql.Driver claims to not accept jdbcUrl,
+  postgresql://postgres:PASSWORD@postgres.railway.internal:5432/railway
+  Solución: Railway da la URL en formato genérico. Spring necesita el prefijo jdbc: y las credenciales separadas. Se cambió la variable DB_URL en Railway:
+  ❌ postgresql://postgres:PASSWORD@postgres.railway.internal:5432/railway?sslmode=require
+  ✅ jdbc:postgresql://postgres.railway.internal:5432/railway?sslmode=require
+
+🔴 Error 2 — CORS: 403 desde el frontend
+  Error: El frontend mostraba "Error al cargar conflictos". La pestaña Red del navegador mostraba la llamada a /conflicts con estado 403 y CORS Missing Allow Origin.
+  Mostrar imagen
+  Solución: El ConflictController tenía @CrossOrigin pero eso solo cubre ese controller. Se creó una clase CorsConfig.java con configuración CORS
+  global que cubre todos los endpoints y se eliminó el @CrossOrigin del controller:
+  java@Configuration
+  public class CorsConfig implements WebMvcConfigurer {
+      @Override
+      public void addCorsMappings(CorsRegistry registry) {
+          registry.addMapping("/**")
+                  .allowedOrigins(
+                      "http://localhost:5173",
+                      "http://localhost:5175",
+                      "https://conflicttracker-frontend.vercel.app"
+                  )
+                  .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                  .allowedHeaders("*");
+      }
+  }
+
+🔴 Error 3 — Frontend sin URL de la API en producción (Imagen añadida en capeta)
+  Error: El frontend no cargaba datos en Vercel porque VITE_API_URL no estaba definida y las llamadas a la API fallaban.
+  Solución: Se creó el archivo .env local y se añadió la variable en Vercel → Settings → Environment Variables:
+  VITE_API_URL=https://conflicttracker-production-d413.up.railway.app/api/v1
+
+
+🔴 Error 4 — Conflicto de dependencias H2 y PostgreSQL en el pom.xml
+  Error: El pom.xml tenía H2 (base de datos en memoria usada en desarrollo) y PostgreSQL a la vez, causando conflictos al arrancar en producción.
+  Solución: Se eliminó la dependencia de H2 del pom.xml:
+  xml<!-- Eliminado -->
+  <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <scope>runtime</scope>
+  </dependency>
+
+🟡 Mejora — SPA Routing en Vercel
+  Problema: Al refrescar una ruta interna en Vercel devolvía 404.
+  Solución: El archivo vercel.json redirige todas las rutas al index.html para que Vue Router gestione la navegación:
+  json{
+    "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+
+
+>>> Durante el proceso de despliegue se produjeron otros errores menores de configuración que no fueron capturados en pantalla, como
+ajustes en el formato de las variables de entorno y reinicios del servicio en Railway mientras se iteraba sobre la configuración correcta.
+
+
+## Instrucciones para un Nuevo Despliegue
+
+### Backend en Railway
+
+1. Crear un nuevo proyecto en [railway.app](https://railway.app)
+2. Añadir un servicio PostgreSQL
+3. Añadir un servicio desde el repositorio GitHub del backend
+4. En el servicio del backend, configurar las **Variables**:
+   - `DB_URL` → `jdbc:postgresql://postgres.railway.internal:5432/railway?sslmode=require`
+   - `DB_USERNAME` → `postgres`
+   - `DB_PASSWORD` → (copiar del servicio PostgreSQL de Railway)
+5. Copiar el dominio público generado por Railway
+
+### Frontend en Vercel
+
+1. Importar el repositorio del frontend desde [vercel.com](https://vercel.com)
+2. En **Settings → Environment Variables**, añadir:
+   - `VITE_API_URL` → `https://TU-DOMINIO.up.railway.app/api/v1`
+3. Hacer un nuevo deploy para que Vercel aplique la variable
+
+---
+
+## 📁 Repositorios
+
+- **Frontend:** [https://github.com/Iria141/conflicttracker_frontend](https://github.com/Iria141/conflicttracker_frontend)
+- **Backend:** [https://github.com/Iria141/conflicttracker](https://github.com/Iria141/conflicttracker)
