@@ -20,8 +20,10 @@ import java.util.stream.Collectors;
 /*Recibe peticiones
 */
 
-@CrossOrigin(origins = "https://conflicttracker-frontend.vercel.app")
-@RestController
+@CrossOrigin(origins = {
+        "http://localhost:5175",
+        "https://conflicttracker-frontend.vercel.app"
+})@RestController
 @RequestMapping("/conflicts")
 public class ConflictController {
 
